@@ -7,7 +7,7 @@ class WelcomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF2D2D2D),
+      backgroundColor: const Color(0xFF3A3A3A),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
