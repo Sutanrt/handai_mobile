@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_svg: ^2.0.7
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -87,3 +88,11 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+  assets:
+    - assets/handai-logo-filled.svg
+    - assets/handai-text-logo.svg
+    - assets/handai-logo.svg
+    - assets/handai-text-logo-wrapped.svg
+    - assets/handai-text-logo-light.svg
+    - assets/handai-text.svg
