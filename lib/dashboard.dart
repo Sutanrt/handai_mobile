@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import 'basket.dart';
+
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
 
@@ -35,7 +37,12 @@ class DashboardPage extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.shopping_cart, color: Colors.white),
                     onPressed: () {
-                      // TODO: Tambahkan aksi ke keranjang
+                      Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const BasketPage(),
+                      ),
+                    );
                     },
                   ),
                 ],

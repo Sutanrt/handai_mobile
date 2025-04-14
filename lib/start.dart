@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'login.dart';
 import 'signin.dart';
-import 'login.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({super.key});
