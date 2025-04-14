@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'login.dart';
 import 'signin.dart';
 
 class StartPage extends StatelessWidget {
@@ -77,7 +78,14 @@ class StartPage extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ),
+                        );
+                      },
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
