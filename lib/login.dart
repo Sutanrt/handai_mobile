@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'basket.dart';
 import 'signin.dart';
-import 'welcome_page.dart';
+import 'dashboard.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -133,10 +133,10 @@ class _LoginPageState extends State<LoginPage> {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const BasketPage(),
-                        ),
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DashboardPage(),
+                      ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
