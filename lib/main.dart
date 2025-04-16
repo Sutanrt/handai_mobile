@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'views/start.dart'; // Import halaman StartPage
-import 'views/test_api_page.dart'; // Import halaman untuk tes API
+// import 'views/test_api_page.dart'; // Import halaman untuk tes API
 
 void main() {
   runApp(const MyApp());
