@@ -30,7 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_svg: ^2.0.7
+  flutter_svg: ^1.0.0
   http: ^0.13.3
 
   # The following adds the Cupertino Icons font to your application.
@@ -91,20 +91,6 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
   assets:
-    - assets/handai-logo-filled.svg
-    - assets/handai-text-logo.svg
-    - assets/handai-logo.svg
-    - assets/handai-text-logo-wrapped.svg
-    - assets/handai-text-logo-light.svg
-    - assets/handai-text.svg
-    - assets/handai-logo-light.svg
-    - assets/handai-text-light.svg
-    - assets/Produk/Choco Latte.svg
-    - assets/Produk/Kopi Susu Gula Aren.svg
-    - assets/Produk/Matcha Latte.svg
-    - assets/Produk/Red Velvet Latte.svg
-    - assets/Produk/SPARKLIME.svg
-    - assets/Produk/SUSU KURMA.svg
-    - assets/Produk/TARO LATTE.svg
-    - assets/Produk/VANILA REGAL.svg
+    - assets/
+    - assets/Produk/
     - assets/images/
