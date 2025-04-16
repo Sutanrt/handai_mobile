@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
+import '../utils/config.dart';
 import 'signin.dart';
 import 'dashboard.dart';
 
@@ -14,6 +17,57 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool _obscurePassword = true;
   bool _emailValid = true;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> _login() async {
+    final email = _emailController.text;
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Email dan password harus diisi')),
+      );
+      return;
+    }
+
+    final url = Uri.parse('${Config.baseUrl}/api/login');
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password}),
+      );
+
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const DashboardPage()),
+        );
+      } else {
+        final errorData = jsonDecode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(errorData['message'] ?? 'Login gagal')),
+        );
+      }
+    } catch (error) {
+      print('Error: $error');
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Terjadi error, coba lagi')));
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +86,6 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               const SizedBox(height: 20),
-
               const Text(
                 'Log in',
                 style: TextStyle(
@@ -42,7 +95,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 30),
-
               const Text(
                 'Email address',
                 style: TextStyle(
@@ -53,6 +105,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 8),
               TextFormField(
+                controller: _emailController,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -72,7 +125,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 16),
-
               const Text(
                 'Password',
                 style: TextStyle(
@@ -83,6 +135,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 8),
               TextFormField(
+                controller: _passwordController,
                 obscureText: _obscurePassword,
                 decoration: InputDecoration(
                   filled: true,
@@ -111,7 +164,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 8),
-
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
@@ -126,18 +178,10 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 8),
-
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const DashboardPage(),
-                      ),
-                    );
-                  },
+                  onPressed: _login,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -152,7 +196,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 40),
-
               Row(
                 children: const [
                   Expanded(child: Divider(color: Colors.white, thickness: 1)),
@@ -167,7 +210,6 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               const SizedBox(height: 20),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -178,9 +220,7 @@ class _LoginPageState extends State<LoginPage> {
                   _buildSocialButton(Icons.apple, Colors.black),
                 ],
               ),
-
               const Spacer(),
-
               Center(
                 child: RichText(
                   text: TextSpan(
