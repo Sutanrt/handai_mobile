@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../utils/config.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -10,7 +13,29 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage> {
   int _selectedIndex = 0;
+  List<dynamic> products = [];
   List<Map<String, dynamic>> cart = [];
+  int selectedStoreId = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchProducts();
+  }
+
+  Future<void> _fetchProducts() async {
+    final url = '${Config.baseUrl}/api/stores/$selectedStoreId/products';
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      setState(() {
+        products = data;
+      });
+    } else {
+      throw Exception('Failed to load products');
+    }
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -37,41 +62,67 @@ class _DashboardPageState extends State<DashboardPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         Container(
-                          margin: const EdgeInsets.only(top: 16, bottom: 16),
-                          padding: const EdgeInsets.all(16),
+                          margin: const EdgeInsets.only(bottom: 16),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 35,
+                            vertical: 50,
+                          ),
                           decoration: BoxDecoration(
                             color: customGreen,
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(24),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                'assets/handai-text-logo-wrapped-light.svg',
-                                width: 40,
-                                height: 40,
-                              ),
-                            ],
+                          child: SvgPicture.asset(
+                            'assets/handai-text-logo-wrapped-light.svg',
+                            width: 80,
+                            height: 80,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(30),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.store, color: Colors.white),
+                            const SizedBox(width: 8),
+                            const Text(
+                              'Lokasi: ',
+                              style: TextStyle(color: Colors.white),
                             ),
-                            child: const TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Search',
-                                border: InputBorder.none,
-                                icon: Icon(Icons.search),
+                            DropdownButton<int>(
+                              value: selectedStoreId,
+                              dropdownColor: Colors.white,
+                              icon: const Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.white,
                               ),
+                              underline: Container(),
+                              items: const [
+                                DropdownMenuItem(
+                                  value: 1,
+                                  child: Text(
+                                    "GKU",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                DropdownMenuItem(
+                                  value: 2,
+                                  child: Text(
+                                    "MSU",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                              onChanged: (value) {
+                                if (value != null) {
+                                  setState(() {
+                                    selectedStoreId = value;
+                                  });
+                                  _fetchProducts();
+                                }
+                              },
                             ),
-                          ),
+                          ],
                         ),
                       ],
                     ),
@@ -83,86 +134,55 @@ class _DashboardPageState extends State<DashboardPage> {
               delegate: SliverChildListDelegate([
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: GridView.count(
+                  child: GridView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                    children: [
-                      MenuCard(
-                        'Choco Latte',
-                        'assets/Produk/Choco-Latte.png',
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                        ),
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      final product = products[index];
+                      final name = product['name'] ?? 'No Name';
+                      final image = 'assets/Produk/${product['image']}';
+                      final variants =
+                          product['variants'] as List<dynamic>? ?? [];
+
+                      int displayPrice = 0;
+
+                      if (variants.isNotEmpty) {
+                        variants.sort(
+                          (a, b) =>
+                              (a['price'] as int).compareTo(b['price'] as int),
+                        );
+
+                        final cheapest = variants.first;
+
+                        final isPromo =
+                            cheapest['is_promo']?.toString().toLowerCase() ==
+                            'yes';
+                        final int basePrice = cheapest['price'] ?? 0;
+                        final int discount = cheapest['price_discount'] ?? 0;
+
+                        displayPrice =
+                            isPromo ? (basePrice - discount) : basePrice;
+                      }
+
+                      return MenuCard(
+                        name,
+                        image,
+                        price: displayPrice,
+                        variants: variants,
                         onAddToCart: (item) {
                           setState(() {
                             cart.add(item);
                           });
                         },
-                      ),
-                      MenuCard(
-                        'Kopi Susu Gula Aren',
-                        'assets/Produk/Kopi-Susu-Gula-Aren.png',
-                        onAddToCart: (item) {
-                          setState(() {
-                            cart.add(item);
-                          });
-                        },
-                      ),
-                      MenuCard(
-                        'Matcha Latte',
-                        'assets/Produk/Matcha-Latte.png',
-                        onAddToCart: (item) {
-                          setState(() {
-                            cart.add(item);
-                          });
-                        },
-                      ),
-                      MenuCard(
-                        'Red Velvet Latte',
-                        'assets/Produk/Red-Velvet-Latte.png',
-                        onAddToCart: (item) {
-                          setState(() {
-                            cart.add(item);
-                          });
-                        },
-                      ),
-                      MenuCard(
-                        'Sparklime',
-                        'assets/Produk/SPARKLIME.png',
-                        onAddToCart: (item) {
-                          setState(() {
-                            cart.add(item);
-                          });
-                        },
-                      ),
-                      MenuCard(
-                        'Susu Kurma',
-                        'assets/Produk/SUSU-KURMA.png',
-                        onAddToCart: (item) {
-                          setState(() {
-                            cart.add(item);
-                          });
-                        },
-                      ),
-                      MenuCard(
-                        'Taro Latte',
-                        'assets/Produk/TARO-LATTE.png',
-                        onAddToCart: (item) {
-                          setState(() {
-                            cart.add(item);
-                          });
-                        },
-                      ),
-                      MenuCard(
-                        'Vanilla Regal',
-                        'assets/Produk/VANILA-REGAL.png',
-                        onAddToCart: (item) {
-                          setState(() {
-                            cart.add(item);
-                          });
-                        },
-                      ),
-                    ],
+                      );
+                    },
                   ),
                 ),
               ]),
@@ -217,12 +237,16 @@ class _DashboardPageState extends State<DashboardPage> {
 class MenuCard extends StatelessWidget {
   final String title;
   final String imagePath;
+  final int price;
+  final List<dynamic> variants;
   final Function(Map<String, dynamic>) onAddToCart;
 
   const MenuCard(
     this.title,
     this.imagePath, {
     super.key,
+    required this.price,
+    required this.variants,
     required this.onAddToCart,
   });
 
@@ -239,16 +263,21 @@ class MenuCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(imagePath, height: 80),
+          Image.asset(
+            imagePath,
+            height: 80,
+            errorBuilder: (context, error, stackTrace) {
+              return const Icon(Icons.error, size: 80);
+            },
+          ),
           const SizedBox(height: 8),
           Text(
             title,
             style: const TextStyle(fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
-          const Text('Lorem sum lorem sum', textAlign: TextAlign.center),
           const SizedBox(height: 8),
-          const Text('Rp. 10.000'),
+          Text('Rp. $price'),
           const SizedBox(height: 8),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -265,10 +294,14 @@ class MenuCard extends StatelessWidget {
                 ),
                 isScrollControlled: true,
                 builder:
-                    (context) =>
-                        OrderModal(title: title, onAddToCart: onAddToCart),
+                    (context) => OrderModal(
+                      title: title,
+                      variants: variants,
+                      onAddToCart: onAddToCart,
+                    ),
               );
             },
+
             child: const Text('ADD +', style: TextStyle(color: Colors.white)),
           ),
         ],
@@ -279,9 +312,15 @@ class MenuCard extends StatelessWidget {
 
 class OrderModal extends StatefulWidget {
   final String title;
+  final List<dynamic> variants;
   final Function(Map<String, dynamic>) onAddToCart;
 
-  const OrderModal({super.key, required this.title, required this.onAddToCart});
+  const OrderModal({
+    super.key,
+    required this.title,
+    required this.variants,
+    required this.onAddToCart,
+  });
 
   @override
   State<OrderModal> createState() => _OrderModalState();
@@ -291,11 +330,34 @@ class _OrderModalState extends State<OrderModal> {
   int quantity = 1;
   String selectedSize = 'Medium';
 
-  final Map<String, int> prices = {
-    'Small': 10000,
-    'Medium': 13000,
-    'Large': 16000,
-  };
+  late Map<String, int> prices;
+
+  @override
+  void initState() {
+    super.initState();
+
+    final sorted = List.from(widget.variants)
+      ..sort((a, b) => (a['price'] as int).compareTo(b['price'] as int));
+
+    prices = {
+      'Small': _getFinalPrice(sorted[0]),
+      'Medium':
+          sorted.length > 1
+              ? _getFinalPrice(sorted[1])
+              : _getFinalPrice(sorted[0]),
+      'Large':
+          sorted.length > 2
+              ? _getFinalPrice(sorted[2])
+              : _getFinalPrice(sorted.last),
+    };
+  }
+
+  int _getFinalPrice(Map variant) {
+    final base = variant['price'] ?? 0;
+    final discount = variant['price_discount'] ?? 0;
+    final isPromo = (variant['is_promo']?.toString().toLowerCase() == 'yes');
+    return isPromo ? (base - discount) : base;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -321,7 +383,6 @@ class _OrderModalState extends State<OrderModal> {
               ),
             ],
           ),
-          const Text('Lorem sum Lorem sum'),
           const SizedBox(height: 10),
           Text(
             'Rp ${price * quantity}',
