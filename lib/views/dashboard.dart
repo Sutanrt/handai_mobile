@@ -419,7 +419,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               fit: BoxFit.cover,
                               errorBuilder:
                                   (_, __, ___) => Image.asset(
-                                    'assets//Produk/Image-not-found.png',
+                                    'assets/Produk/Image-not-found.png',
                                     height: 80,
                                     fit: BoxFit.cover,
                                   ),
@@ -708,7 +708,10 @@ class _OrderModalState extends State<OrderModal> {
             return RadioListTile<int>(
               title: Text(
                 '$opts — Rp $fp${promo ? ' (disc Rp ${v.priceDiscount})' : ''}',
-                style: promo ? const TextStyle(color: Colors.red) : null,
+                style:
+                    promo
+                        ? const TextStyle(color: const Color(0xFF0C9044))
+                        : null,
               ),
               value: v.id,
               groupValue: selectedVariantId,
