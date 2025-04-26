@@ -17,15 +17,7 @@ class Navbar extends StatelessWidget {
         page = const DashboardPage(); // Buat file ini kalau belum
         break;
       case 2:
-        page = ProfilePage(
-          userData: {
-            'name': 'Dafi',
-            'email': 'dafi@example.com',
-            'phone': '08123456789',
-            'address': 'Bandung',
-            'created_at': '2024-01-01',
-          },
-        );
+        page = ProfilePage();
         break;
       default:
         page = const DashboardPage();
