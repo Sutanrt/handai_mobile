@@ -1,0 +1,54 @@
+import 'package:flutter/material.dart';
+import 'dashboard.dart';
+import 'profile.dart';
+
+class Navbar extends StatelessWidget {
+  final int currentIndex;
+
+  const Navbar({super.key, required this.currentIndex});
+
+  void _onTap(BuildContext context, int index) {
+    Widget page;
+    switch (index) {
+      case 0:
+        page = const DashboardPage();
+        break;
+      case 1:
+        page = const DashboardPage(); // Buat file ini kalau belum
+        break;
+      case 2:
+        page = ProfilePage(
+          userData: {
+            'name': 'Dafi',
+            'email': 'dafi@example.com',
+            'phone': '08123456789',
+            'address': 'Bandung',
+            'created_at': '2024-01-01',
+          },
+        );
+        break;
+      default:
+        page = const DashboardPage();
+    }
+
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => page));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      currentIndex: currentIndex,
+      selectedItemColor: const Color(0xFF0C9044),
+      unselectedItemColor: Colors.grey,
+      onTap: (index) => _onTap(context, index),
+      items: const [
+        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+        BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.account_circle),
+          label: 'Profile',
+        ),
+      ],
+    );
+  }
+}

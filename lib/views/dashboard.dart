@@ -7,6 +7,7 @@ import '../utils/config.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:html' as html;
+import 'navbar.dart';
 
 const double maxDistanceKm = 20.0;
 
@@ -177,7 +178,6 @@ class _CachedImageMemoryState extends State<CachedImageMemory> {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-  int _selectedIndex = 0;
   List<Map<String, dynamic>> stores = [];
   List<Product> products = [];
   List<Map<String, dynamic>> cart = [];
@@ -268,12 +268,6 @@ class _DashboardPageState extends State<DashboardPage> {
       setState(() => loadingProducts = false);
       throw Exception('Failed to load products');
     }
-  }
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
   }
 
   @override
@@ -443,20 +437,7 @@ class _DashboardPageState extends State<DashboardPage> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        selectedItemColor: customGreen,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
-            label: 'Profile',
-          ),
-        ],
-      ),
+      bottomNavigationBar: const Navbar(currentIndex: 0),
       bottomSheet:
           cart.isNotEmpty
               ? Container(
