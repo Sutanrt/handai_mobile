@@ -430,7 +430,18 @@ class _DashboardPageState extends State<DashboardPage> {
                       imageWidget: imageWidget,
                       price: product.price,
                       variants: product.variants,
-                      onAddToCart: (item) => setState(() => cart.add(item)),
+                      onAddToCart: (item) {
+                        setState(() {
+                          final index = cart.indexWhere((element) =>
+                            element['product_id'] == item['product_id'] &&
+                            element['variant_id'] == item['variant_id']);
+                          if (index != -1) {
+                            cart[index]['qty'] += item['qty'];
+                          } else {
+                            cart.add(item);
+                          }
+                        });
+                      },
                     );
                   }, childCount: products.length),
                 ),
