@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'Payment.dart';
 import 'dashboard.dart';
 
 class BasketPage extends StatefulWidget {
@@ -195,7 +196,7 @@ class _BasketPageState extends State<BasketPage> {
               Expanded(
                 child: ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(), // Biar tidak bisa scroll di dalam Column
+                  physics: AlwaysScrollableScrollPhysics(),
                   itemCount: widget.cart.length,
                   itemBuilder: (context, index) {
                     final item = widget.cart[index];
@@ -341,7 +342,10 @@ class _BasketPageState extends State<BasketPage> {
                     ),
                   ),
                   onPressed: () {
-                    // Aksi checkout
+                    Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const PaymentMethodPage()),
+                  );
                   },
                   child: const Text(
                     'Select Payment',
