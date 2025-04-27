@@ -83,10 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     _buildProfileItem("Nama", userData?['name']),
                     _buildProfileItem("Email", userData?['email']),
                     _buildProfileItem("No. HP", userData?['phone']),
-                    _buildProfileItem(
-                      "Tanggal Daftar",
-                      userData?['created_at'],
-                    ),
+                    _buildProfileItem("Dibuat oleh", userData?['created_by']),
                   ],
                 ),
       ),
