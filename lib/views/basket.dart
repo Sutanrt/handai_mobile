@@ -195,7 +195,7 @@ class _BasketPageState extends State<BasketPage> {
               Expanded(
                 child: ListView.separated(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(), // Biar ikut scroll parent
+                  physics: AlwaysScrollableScrollPhysics(), // Biar ikut scroll parent
                   itemCount: widget.cart.length,
                   separatorBuilder: (context, index) => Divider(
                     thickness: 1,
