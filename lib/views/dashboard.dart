@@ -7,6 +7,7 @@ import '../utils/config.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:html' as html;
+import 'basket.dart';
 import 'navbar.dart';
 
 const double maxDistanceKm = 20.0;
@@ -458,6 +459,28 @@ class _DashboardPageState extends State<DashboardPage> {
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context, 
+                          MaterialPageRoute(
+                            builder: 
+                              (context) => const BasketPage()),
+                        );
+                      },
+                      style: IconButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                      ),
+                      icon: const Icon(
+                        Icons.notifications_outlined,
+                        color: Colors.white,
                       ),
                     ),
                   ],
