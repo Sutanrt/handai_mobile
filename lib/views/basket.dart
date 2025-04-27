@@ -10,7 +10,7 @@ class BasketPage extends StatefulWidget {
 }
 
 class _BasketPageState extends State<BasketPage> {
-  String selectedOption = 'Dine In';
+  String selectedOption = 'Pickup';
   String selectedLocation = 'Pilih Lokasi';
   String deliveryAddress = '';
 
@@ -100,13 +100,13 @@ class _BasketPageState extends State<BasketPage> {
               Row(
                 children: [
                   _buildOptionCard(
-                    title: 'Dine In',
+                    title: 'Pickup',
                     description: 'Dapat diambil di store',
                     imagePath: 'assets/images/handai-dinein.png',
-                    isSelected: selectedOption == 'Dine In',
+                    isSelected: selectedOption == 'Pickup',
                     onTap: () {
                       setState(() {
-                        selectedOption = 'Dine In';
+                        selectedOption = '';
                       });
                     },
                   ),
