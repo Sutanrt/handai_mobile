@@ -180,7 +180,6 @@ class _BasketPageState extends State<BasketPage> {
                 ),
               ),
 
-
               Divider(),
 
               const Text(
