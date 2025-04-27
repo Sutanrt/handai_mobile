@@ -466,8 +466,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         Navigator.push(
                           context, 
                           MaterialPageRoute(
-                            builder: 
-                              (context) => const BasketPage()),
+                            builder: (context) => BasketPage(cart: cart),
+                          ),
                         );
                       },
                       style: IconButton.styleFrom(
@@ -479,8 +479,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                       ),
                       icon: const Icon(
-                        Icons.notifications_outlined,
-                        color: Colors.white,
+                        Icons.shopping_cart,
+                        color: Colors.green,
                       ),
                     ),
                   ],

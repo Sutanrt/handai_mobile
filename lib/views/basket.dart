@@ -3,7 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'dashboard.dart';
 
 class BasketPage extends StatefulWidget {
-  const BasketPage({super.key});
+  final List<Map<String, dynamic>> cart;
+
+  const BasketPage({Key? key, required this.cart}) : super(key: key);
 
   @override
   State<BasketPage> createState() => _BasketPageState();
@@ -65,6 +67,11 @@ class _BasketPageState extends State<BasketPage> {
 
   @override
   Widget build(BuildContext context) {
+    final totalPrice = widget.cart.fold<int>(
+      0,
+      (sum, item) => sum + ((item['price'] as int) * (item['qty'] as int)),
+    );
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea( 
@@ -100,13 +107,13 @@ class _BasketPageState extends State<BasketPage> {
               Row(
                 children: [
                   _buildOptionCard(
-                    title: 'Dine In',
+                    title: 'Pickup',
                     description: 'Dapat diambil di store',
                     imagePath: 'assets/images/handai-dinein.png',
-                    isSelected: selectedOption == 'Dine In',
+                    isSelected: selectedOption == 'Pickup',
                     onTap: () {
                       setState(() {
-                        selectedOption = 'Dine In';
+                        selectedOption = 'Pickup';
                       });
                     },
                   ),
@@ -148,7 +155,7 @@ class _BasketPageState extends State<BasketPage> {
                           if (selectedOption != 'Delivery')
                             IconButton(
                               onPressed: _selectLocation,
-                              icon: Icon(Icons.edit),
+                              icon: Icon(Icons.arrow_drop_down),
                             ),
                         ],
                       ),
@@ -185,64 +192,75 @@ class _BasketPageState extends State<BasketPage> {
               ),
               const SizedBox(height: 5),
 
-              Card(
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/images/MATCHA.png',
-                            width: 50,
-                            height: 130,
-                          ),
-                          SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Matcha Latte',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              Text(
-                                'Size: Medium',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                              Row(
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(), // Biar tidak bisa scroll di dalam Column
+                  itemCount: widget.cart.length,
+                  itemBuilder: (context, index) {
+                    final item = widget.cart[index];
+                    return Card(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/images/MATCHA.png', 
+                              width: 50,
+                              height: 130,
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Rp 13.000',
-                                    style: TextStyle(
+                                    item['product_name'],
+                                    style: const TextStyle(
                                       color: Colors.black,
-                                      fontSize: 20,
+                                      fontSize: 22,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                  const SizedBox(width: 100),
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(Icons.edit),
+                                  Text(
+                                    item['variant_summary'] ?? '',
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Rp ${item['price']} x ${item['qty']}',
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          // nanti bisa tambahkan fitur edit item di cart
+                                        },
+                                        icon: const Icon(Icons.edit),
+                                      )
+                                    ],
                                   )
                                 ],
-                              )
-                            ],
-                          ),
-                        ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
               ),
+
 
               const SizedBox(height: 20),
               Divider(),
@@ -300,13 +318,13 @@ class _BasketPageState extends State<BasketPage> {
                 ),
               ),
               const SizedBox(height: 10),
-              _buildPaymentRow('Price', 'Rp. 26.000'),
+              _buildPaymentRow('Price', 'Rp. $totalPrice'),
               _buildPaymentRow('Delivery fee', 'Rp. 0'),
               _buildPaymentRow('Discount', 'Rp. 0'),
               const SizedBox(height: 10),
               _buildPaymentRow(
                 'Total Price',
-                'Rp. 26.000',
+                'Rp. $totalPrice',
                 isBold: true,
               ),
 
@@ -326,7 +344,7 @@ class _BasketPageState extends State<BasketPage> {
                     // Aksi checkout
                   },
                   child: const Text(
-                    'Checkout',
+                    'Select Payment',
                     style: TextStyle(fontSize: 18),
                   ),
                 ),
