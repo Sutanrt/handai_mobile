@@ -113,7 +113,7 @@ class _BasketPageState extends State<BasketPage> {
                     isSelected: selectedOption == 'Pickup',
                     onTap: () {
                       setState(() {
-                        selectedOption = 'Pickup';
+                        selectedOption = 'Dine In';
                       });
                     },
                   ),
@@ -193,74 +193,93 @@ class _BasketPageState extends State<BasketPage> {
               const SizedBox(height: 5),
 
               Expanded(
-                child: ListView.builder(
+                child: ListView.separated(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(), // Biar tidak bisa scroll di dalam Column
+                  physics: NeverScrollableScrollPhysics(), // Biar ikut scroll parent
                   itemCount: widget.cart.length,
+                  separatorBuilder: (context, index) => Divider(
+                    thickness: 1,
+                    color: Colors.grey.shade300,
+                  ),
                   itemBuilder: (context, index) {
                     final item = widget.cart[index];
-                    return Card(
-                      color: Colors.white,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/images/MATCHA.png', 
-                              width: 50,
-                              height: 130,
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.asset(
+                              'assets/images/MATCHA.png',
+                              width: 70,
+                              height: 70,
+                              fit: BoxFit.cover,
                             ),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    item['product_name'],
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                          ),
+                          SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item['product_name'],
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  Text(
-                                    item['variant_summary'] ?? '',
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w300,
-                                    ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  item['variant_summary'] ?? '',
+                                  style: TextStyle(
+                                    color: Colors.grey.shade600,
+                                    fontSize: 14,
                                   ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Rp ${item['price']} x ${item['qty']}',
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700,
-                                        ),
+                                ),
+                                SizedBox(height: 8),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: 'Rp ${item['price']}',
+                                            style: TextStyle(
+                                              color: Colors.redAccent,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text: '  x${item['qty']}',
+                                            style: TextStyle(
+                                              color: Colors.grey.shade700,
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      IconButton(
-                                        onPressed: () {
-                                          // nanti bisa tambahkan fitur edit item di cart
-                                        },
-                                        icon: const Icon(Icons.edit),
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        // Tambahkan fitur edit di sini
+                                      },
+                                      icon: Icon(Icons.edit, size: 20, color: Colors.grey),
+                                    ),
+                                  ],
+                                )
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     );
                   },
                 ),
               ),
-
 
               const SizedBox(height: 20),
               Divider(),

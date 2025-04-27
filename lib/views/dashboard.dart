@@ -439,54 +439,59 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
       ),
       bottomNavigationBar: const Navbar(currentIndex: 0),
-      bottomSheet:
-          cart.isNotEmpty
-              ? Container(
-                color: customGreen,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 12,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '${cart.fold<int>(0, (sum, item) => sum + (item['qty'] as int))} Item',
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                    Text(
-                      'Rp ${cart.fold<int>(0, (sum, item) => sum + ((item['price'] as int) * (item['qty'] as int)))}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context, 
-                          MaterialPageRoute(
-                            builder: (context) => BasketPage(cart: cart),
-                          ),
-                        );
-                      },
-                      style: IconButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
+      bottomSheet: cart.isNotEmpty
+          ? Container(
+              color: customGreen,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 12,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${cart.fold<int>(0, (sum, item) => sum + (item['qty'] as int))} Item',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        'Rp ${cart.fold<int>(0, (sum, item) => sum + ((item['price'] as int) * (item['qty'] as int)))}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      icon: const Icon(
-                        Icons.shopping_cart,
-                        color: Colors.green,
+                      const SizedBox(width: 10), // Space between text and button
+                      IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => BasketPage(cart: cart),
+                            ),
+                          );
+                        },
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                        ),
+                        icon: const Icon(
+                          Icons.shopping_cart,
+                          color: Colors.green,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              )
-              : null,
+                    ],
+                  ),
+                ],
+              ),
+            )
+          : null,
+
     );
   }
 }
