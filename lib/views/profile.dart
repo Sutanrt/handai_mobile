@@ -32,6 +32,9 @@ class _ProfilePageState extends State<ProfilePage> {
         },
       );
 
+      print('Status Code: ${response.statusCode}');
+      print('Response Body: ${response.body}');
+
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         setState(() {
@@ -80,7 +83,6 @@ class _ProfilePageState extends State<ProfilePage> {
                     _buildProfileItem("Nama", userData?['name']),
                     _buildProfileItem("Email", userData?['email']),
                     _buildProfileItem("No. HP", userData?['phone']),
-                    _buildProfileItem("Alamat", userData?['address']),
                     _buildProfileItem(
                       "Tanggal Daftar",
                       userData?['created_at'],
