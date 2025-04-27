@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'dashboard.dart';
-import 'profile.dart';
 
 class Navbar extends StatelessWidget {
   final int currentIndex;
@@ -15,9 +14,6 @@ class Navbar extends StatelessWidget {
         break;
       case 1:
         page = const DashboardPage(); // Buat file ini kalau belum
-        break;
-      case 2:
-        page = ProfilePage();
         break;
       default:
         page = const DashboardPage();
@@ -36,10 +32,6 @@ class Navbar extends StatelessWidget {
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
         BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History'),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.account_circle),
-          label: 'Profile',
-        ),
       ],
     );
   }

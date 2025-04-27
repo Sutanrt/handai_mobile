@@ -187,21 +187,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                    foregroundColor: Colors.black,
-                    padding: EdgeInsets.zero,
-                    minimumSize: const Size(50, 30),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  ),
-                  child: const Text('Forgot password?'),
-                ),
-              ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 15),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -230,30 +216,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(height: 40),
-              Row(
-                children: const [
-                  Expanded(child: Divider(color: Colors.white, thickness: 1)),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(
-                      'Or Login with',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  Expanded(child: Divider(color: Colors.white, thickness: 1)),
-                ],
-              ),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildSocialButton(Icons.facebook, Colors.blue),
-                  const SizedBox(width: 16),
-                  _buildSocialButton(Icons.g_mobiledata, Colors.red),
-                  const SizedBox(width: 16),
-                  _buildSocialButton(Icons.apple, Colors.black),
-                ],
-              ),
               const Spacer(),
               Center(
                 child: RichText(
@@ -288,17 +251,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildSocialButton(IconData icon, Color color) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      padding: const EdgeInsets.all(12),
-      child: Icon(icon, color: color, size: 30),
     );
   }
 }
