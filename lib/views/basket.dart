@@ -108,10 +108,8 @@ class _BasketPageState extends State<BasketPage> {
                 children: [
                   _buildOptionCard(
                     title: 'Pickup',
-                    title: 'Pickup',
                     description: 'Dapat diambil di store',
                     imagePath: 'assets/images/handai-dinein.png',
-                    isSelected: selectedOption == 'Pickup',
                     isSelected: selectedOption == 'Pickup',
                     onTap: () {
                       setState(() {
