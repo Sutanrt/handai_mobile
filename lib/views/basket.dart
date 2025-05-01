@@ -6,7 +6,13 @@ import 'dashboard.dart';
 class BasketPage extends StatefulWidget {
   final List<Map<String, dynamic>> cart;
 
-  const BasketPage({Key? key, required this.cart}) : super(key: key);
+  final Function(List<Map<String, dynamic>> updatedCart) onCartUpdated;
+  
+  const BasketPage({
+    Key? key, 
+    required this.cart,
+    required this.onCartUpdated,
+    }) : super(key: key);
 
   @override
   State<BasketPage> createState() => _BasketPageState();
@@ -64,14 +70,24 @@ class _BasketPageState extends State<BasketPage> {
       ),
     );
   }
+  
+
+  late List<Map<String, dynamic>> cart;
+
+  @override
+  void initState() {
+    super.initState();
+    cart = List<Map<String, dynamic>>.from(widget.cart);
+  }
 
 
   @override
   Widget build(BuildContext context) {
-    final totalPrice = widget.cart.fold<int>(
+    final totalPrice = cart.fold<int>(
       0,
       (sum, item) => sum + ((item['price'] as int) * (item['qty'] as int)),
     );
+
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -193,13 +209,13 @@ class _BasketPageState extends State<BasketPage> {
                 child: ListView.separated(
                   shrinkWrap: true,
                   physics: AlwaysScrollableScrollPhysics(), // Biar ikut scroll parent
-                  itemCount: widget.cart.length,
+                  itemCount: cart.length,
                   separatorBuilder: (context, index) => Divider(
                     thickness: 1,
                     color: Colors.grey.shade300,
                   ),
                   itemBuilder: (context, index) {
-                    final item = widget.cart[index];
+                    final item = cart[index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                       child: Row(
@@ -260,11 +276,16 @@ class _BasketPageState extends State<BasketPage> {
                                         ],
                                       ),
                                     ),
-                                    IconButton(
-                                      onPressed: () {
-                                        // Tambahkan fitur edit di sini
-                                      },
-                                      icon: Icon(Icons.edit, size: 20, color: Colors.grey),
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          onPressed: () => _decreaseQty(index), 
+                                          icon: const Icon(Icons.remove_circle_outline)
+                                        ),
+                                        IconButton(
+                                          onPressed: () => _increaseQty(index), 
+                                          icon: const Icon(Icons.add_circle_outline))
+                                      ],
                                     ),
                                   ],
                                 )
@@ -373,6 +394,24 @@ class _BasketPageState extends State<BasketPage> {
         ),
       ),
     );
+  }
+
+  void _increaseQty(int index) {
+  setState(() {
+      cart[index]['qty'] += 1;
+    });
+    widget.onCartUpdated(cart);
+  }
+
+  void _decreaseQty(int index) {
+    setState(() {
+      if (cart[index]['qty'] > 1) {
+        cart[index]['qty'] -= 1;
+      } else {
+        cart.removeAt(index); // Hapus item jika qty tinggal 1 dan dikurangi
+      }
+    });
+    widget.onCartUpdated(cart);
   }
 
   Widget _buildOptionCard({

@@ -479,7 +479,14 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => BasketPage(cart: cart),
+                              builder: (context) => BasketPage(
+                                cart: cart,
+                                onCartUpdated: (updatedCart) {
+                                  setState(() {
+                                    cart = updatedCart;
+                                  });
+                                }
+                              ),
                             ),
                           );
                         },
@@ -631,7 +638,7 @@ class MenuCard extends StatelessWidget {
 class OrderModal extends StatefulWidget {
   final String title;
   final List<Variant> variants;
-  final void Function(Map<String, dynamic>) onAddToCart;
+  final void Function(Map<String, dynamic >) onAddToCart;
 
   const OrderModal({
     Key? key,
@@ -730,7 +737,7 @@ class _OrderModalState extends State<OrderModal> {
                 '$opts — Rp $fp${promo ? ' (disc Rp ${v.priceDiscount})' : ''}',
                 style:
                     promo
-                        ? const TextStyle(color: const Color(0xFF0C9044))
+                        ? const TextStyle(color: Color(0xFF0C9044))
                         : null,
               ),
               value: v.id,
