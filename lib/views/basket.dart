@@ -83,10 +83,7 @@ class _BasketPageState extends State<BasketPage> {
             children: [
               IconButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const DashboardPage()),
-                  );
+                  Navigator.pop(context);
                 },
                 icon: Icon(Icons.arrow_back),
               ),
