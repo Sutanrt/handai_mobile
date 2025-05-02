@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 // import 'views/test_api_page.dart'; // Import halaman untuk tes API
 // import 'views/store_selection_page.dart';
-import 'views/welcome_page.dart';
+imporimport 'views/welcome_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,6 +22,3 @@ class MyApp extends StatelessWidget {
       home: const WelcomePage(),
       // ini di enabled kalau mau tes api, tapi yg startpage di comment!
       // home: TestApiPage(),
-    );
-  }
-}
