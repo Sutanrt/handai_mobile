@@ -379,9 +379,17 @@ class _BasketPageState extends State<BasketPage> {
                   ),
                   onPressed: () {
                     Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const PaymentMethodPage()),
-                  );
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PaymentMethodPage(
+                          cart: cart,
+                          locationType: selectedOption,
+                          location: selectedLocation,
+                          deliveryAddress: deliveryAddress,
+                          totalPrice: totalPrice,
+                        ),
+                      ),
+                    );
                   },
                   child: const Text(
                     'Select Payment',
